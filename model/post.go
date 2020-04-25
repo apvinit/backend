@@ -37,7 +37,7 @@ type ImportantLink struct {
 // ApplicationFee is used for application fees
 type ApplicationFee struct {
 	Title string `json:"title"`
-	Body  string `json:"body"`
+	Body  string `json:"amount"`
 }
 
 // GeneralItem is used for general items
