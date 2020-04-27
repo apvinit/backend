@@ -11,6 +11,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const apikey1 = "wA5dZ8J1U4mt7X2LFRy9W8337Sda1eAotmSID8dYHHdUfer3"
+const apikey2 = "diAENJWzWGdZmcS3M4/zOVZjSe0O9jhIdmVdG5uVXjasFlxr"
+const apikey3 = "irabmvXNBCo3xf3bhRKagMwhOLbiLvlAlDkhqUIXC28ZTQNZ"
+
 var databaseIP = "127.0.0.1"
 var database = "test"
 
@@ -23,6 +27,10 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
+	e.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) {
+		println(key)
+		return key == apikey1, nil
+	}))
 
 	// Mongodb database client options and connection
 	clientOptions := options.Client().ApplyURI("mongodb://" + databaseIP + ":27017")
