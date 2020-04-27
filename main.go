@@ -40,20 +40,19 @@ func main() {
 	h := &handler.Handler{DB: client.Database(database)}
 
 	// Routes
-	api := e.Group("/api")
 
 	// Create update and delete post
 	// Use auth middleware here
-	api.POST("/post", h.CreatePost)
-	api.PUT("/post/:id", h.UpdatePost)
-	api.DELETE("/post/:id", h.DeletePost)
+	e.POST("/posts", h.CreatePost)
+	e.PUT("/posts/:id", h.UpdatePost)
+	e.DELETE("/posts/:id", h.DeletePost)
 
 	// Get one post
-	api.GET("/post/:id", h.FetchOnePost)
+	e.GET("/posts/:id", h.FetchOnePost)
 	// Get all the posts short info list (with type param)
-	api.GET("/posts", h.GetPostShortInfo)
+	e.GET("/posts", h.GetPostShortInfo)
 	// search endpoint (with q param)
-	api.GET("/posts/search", h.SearchPost)
+	e.GET("/posts/search", h.SearchPost)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":1323"))
