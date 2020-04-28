@@ -23,6 +23,10 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 		return
 	}
 
+	if len(p.ImageLink) == 0 {
+		p.ImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
+	}
+
 	shortLink, err := util.CreateDynamicLink(p)
 	if err != nil {
 		print(err)
