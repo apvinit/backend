@@ -121,7 +121,7 @@ func (h *Handler) GetPostShortInfo(c echo.Context) (err error) {
 	}
 
 	posts := []*model.PostShortInfo{}
-	opt := options.Find().SetProjection(bson.M{})
+	opt := options.Find().SetProjection(bson.M{}).SetLimit(100).SetSort(bson.M{"_id": -1})
 	cur, err := h.DB.Collection("posts").Find(context.TODO(), filter, opt)
 
 	if err != nil {
@@ -144,7 +144,7 @@ func (h *Handler) SearchPost(c echo.Context) (err error) {
 	q := c.QueryParam("q")
 	println(q)
 	posts := []*model.PostShortInfo{}
-	opt := options.Find().SetProjection(bson.M{})
+	opt := options.Find().SetProjection(bson.M{}).SetLimit(20).SetSort(bson.M{"_id": -1})
 	cur, err := h.DB.Collection("posts").Find(context.TODO(), bson.M{"$text": bson.M{"$search": q}}, opt)
 	if err != nil {
 		log.Println(err)
