@@ -5,6 +5,8 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 // Post type for holding post items
 type Post struct {
 	ID           primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	ShortLink    string             `json:"shortLink,omitempty" bson:"shortLink,omitempty"`
+	ImageLink    string             `json:"imageLink,omitemtpy"`
 	Type         string             `json:"type"`
 	Title        string             `json:"title"`
 	Name         string             `json:"name"`
