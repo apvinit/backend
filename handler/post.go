@@ -2,6 +2,7 @@ package handler
 
 import (
 	"backend/model"
+	"backend/util"
 	"context"
 	"log"
 	"net/http"
@@ -21,6 +22,12 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 	if err = c.Bind(p); err != nil {
 		return
 	}
+
+	shortLink, err := util.CreateDynamicLink(p)
+	if err != nil {
+		print(err)
+	}
+	p.ShortLink = shortLink
 
 	_, err = h.DB.Collection("posts").InsertOne(context.TODO(), p)
 	if err != nil {
