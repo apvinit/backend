@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/conf"
 	"backend/handler"
 	"context"
 
@@ -15,9 +16,6 @@ const apikey1 = "wA5dZ8J1U4mt7X2LFRy9W8337Sda1eAotmSID8dYHHdUfer3"
 const apikey2 = "diAENJWzWGdZmcS3M4/zOVZjSe0O9jhIdmVdG5uVXjasFlxr"
 const apikey3 = "irabmvXNBCo3xf3bhRKagMwhOLbiLvlAlDkhqUIXC28ZTQNZ"
 
-var databaseIP = "127.0.0.1"
-var database = "test"
-
 func main() {
 
 	e := echo.New()
@@ -28,12 +26,11 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	e.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) {
-		println(key)
 		return key == apikey1, nil
 	}))
 
 	// Mongodb database client options and connection
-	clientOptions := options.Client().ApplyURI("mongodb://" + databaseIP + ":27017")
+	clientOptions := options.Client().ApplyURI("mongodb://" + conf.DatabaseIP + ":27017")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
@@ -42,10 +39,14 @@ func main() {
 
 	// Check the connection
 	err = client.Ping(context.TODO(), nil)
-	println("Connected to database!")
+	if err == nil {
+		println("Connected to database!")
+	} else {
+		println("Could not connect to database!")
+	}
 
 	// Initialize handler
-	h := &handler.Handler{DB: client.Database(database)}
+	h := &handler.Handler{DB: client.Database(conf.DatabaseName)}
 
 	// Routes
 
@@ -63,6 +64,6 @@ func main() {
 	e.GET("/posts/search", h.SearchPost)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(conf.ServerPort))
 
 }

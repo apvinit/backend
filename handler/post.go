@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"backend/conf"
 	"backend/model"
 	"backend/util"
 	"context"
@@ -24,7 +25,7 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 	}
 
 	if len(p.ImageLink) == 0 {
-		p.ImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
+		p.ImageLink = conf.DefaultImageLink
 	}
 
 	shortLink, err := util.CreateDynamicLink(p)

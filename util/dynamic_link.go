@@ -1,6 +1,7 @@
 package util
 
 import (
+	"backend/conf"
 	"backend/model"
 	"bytes"
 	"encoding/json"
@@ -8,9 +9,7 @@ import (
 	"net/http"
 )
 
-const key = "AIzaSyD5nKQMrrZnRN089ynNPQ6z0AJPxe1j-hA"
-
-const dynamicKeyURL = "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=" + key
+const dynamicKeyURL = "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=" + conf.DynamicLinkAPIKey
 
 // DynamicLinkParameter object
 type DynamicLinkParameter struct {
@@ -52,8 +51,8 @@ type shortLinkResp struct {
 // CreateDynamicLink creates short dynamic link
 func CreateDynamicLink(p *model.Post) (string, error) {
 	a := AndroidInfo{
-		AndroidPackageName:           "xyz.codingabc.jobadda.debug",
-		AndroidMinPackageVersionCode: "7",
+		AndroidPackageName:           conf.AndroidPackageName,
+		AndroidMinPackageVersionCode: conf.AndroidMinPackageVersionCode,
 	}
 
 	s := SocialMetaTagInfo{
@@ -63,7 +62,7 @@ func CreateDynamicLink(p *model.Post) (string, error) {
 	}
 
 	d := DynamicLinkInfo{
-		DomainURIPrefix:   "https://sjobadda.page.link",
+		DomainURIPrefix:   conf.DomainURIPrefix,
 		Link:              "https://sarkarijobadda.in/" + p.ID.Hex(),
 		AndroidInfo:       a,
 		SocialMetaTagInfo: s,
