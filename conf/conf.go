@@ -24,3 +24,23 @@ const DomainURIPrefix = "https://sjobadda.page.link"
 
 // DefaultImageLink is used when imageLink is not passed in the create post request
 const DefaultImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// ------------------------------------  Release Config Values ---------------------------------------- ///
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// const DatabaseIP = "127.0.0.1"
+
+// const DatabaseName = "jobadda"
+
+// const ServerPort = ":8080"
+
+// const DynamicLinkAPIKey = "AIzaSyCAR4-s7t0iN8ZGQjUl__1Q0miAA3x7CuU"
+
+// const AndroidPackageName = "xyz.codingabc.jobadda"
+
+// const AndroidMinPackageVersionCode = "7"
+
+// const DomainURIPrefix = "https://jbda.page.link"
+
+// const DefaultImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
