@@ -25,6 +25,9 @@ const DomainURIPrefix = "https://sjobadda.page.link"
 // DefaultImageLink is used when imageLink is not passed in the create post request
 const DefaultImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
 
+// DeepLinkDomain for deeplink redirect url
+const DeepLinkDomain = "https://jbda.in/"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// ------------------------------------  Release Config Values ---------------------------------------- ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

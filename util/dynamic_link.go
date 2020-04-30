@@ -64,7 +64,7 @@ func CreateDynamicLink(p *model.Post) (string, error) {
 
 	d := DynamicLinkInfo{
 		DomainURIPrefix:   conf.DomainURIPrefix,
-		Link:              "https://sarkarijobadda.in/" + p.ID.Hex(),
+		Link:              conf.DeepLinkDomain + p.ID.Hex(),
 		AndroidInfo:       a,
 		SocialMetaTagInfo: s,
 	}
