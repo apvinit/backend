@@ -22,15 +22,15 @@ const AndroidMinPackageVersionCode = "7"
 // Eg. "https://sjobadda.page.link/sd4T"
 const DomainURIPrefix = "https://sjobadda.page.link"
 
-// DefaultImageLink is used when imageLink is not passed in the create post request
-const DefaultImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
-
-// DeepLinkDomain for deeplink redirect url
-const DeepLinkDomain = "https://jbda.in/"
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// ------------------------------------  Release Config Values ---------------------------------------- ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// DeepLinkDomain for deeplink redirect url (same for debug and prod)
+const DeepLinkDomain = "https://jbda.in/"
+
+// DefaultImageLink is used when imageLink is not passed in the create post request (same for debug & prod)
+const DefaultImageLink = "https://firebasestorage.googleapis.com/v0/b/job-adda.appspot.com/o/images%2Fbanner.jpg?alt=media&token=2081e3ff-b79e-4cd9-9b6b-ae65a74336b8"
 
 // const DatabaseIP = "127.0.0.1"
 
@@ -45,5 +45,3 @@ const DeepLinkDomain = "https://jbda.in/"
 // const AndroidMinPackageVersionCode = "7"
 
 // const DomainURIPrefix = "https://jbda.page.link"
-
-// const DefaultImageLink = "https://www.publicdomainpictures.net/pictures/290000/nahled/job-opportunity.jpg"
