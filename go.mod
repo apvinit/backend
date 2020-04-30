@@ -1,4 +1,4 @@
-module backend
+module github.com/sarkarijobadda/backend
 
 go 1.13
 

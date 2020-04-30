@@ -1,12 +1,13 @@
 package util
 
 import (
-	"backend/conf"
-	"backend/model"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/sarkarijobadda/backend/conf"
+	"github.com/sarkarijobadda/backend/model"
 )
 
 const dynamicKeyURL = "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=" + conf.DynamicLinkAPIKey

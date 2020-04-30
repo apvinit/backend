@@ -1,12 +1,13 @@
 package handler
 
 import (
-	"backend/conf"
-	"backend/model"
-	"backend/util"
 	"context"
 	"log"
 	"net/http"
+
+	"github.com/sarkarijobadda/backend/conf"
+	"github.com/sarkarijobadda/backend/model"
+	"github.com/sarkarijobadda/backend/util"
 
 	"github.com/labstack/echo"
 	"go.mongodb.org/mongo-driver/bson"

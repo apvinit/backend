@@ -1,9 +1,10 @@
 package main
 
 import (
-	"backend/conf"
-	"backend/handler"
 	"context"
+
+	"github.com/sarkarijobadda/backend/conf"
+	"github.com/sarkarijobadda/backend/handler"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
