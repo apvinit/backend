@@ -228,7 +228,11 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 
 	sql := `UPDATE posts SET short_link = ?, image_link = ?, type = ?, title = ?, name = ?, info = ?, created_date = ?, updated_date = ?, organisation = ?, total_vacancy = ?, age_limit_as_on = ?, draft = ?, trash = ? WHERE id = ?`
 
-	h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft, id)
+	_, err = h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft, p.Trash, id)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	return c.NoContent(http.StatusOK)
 }
