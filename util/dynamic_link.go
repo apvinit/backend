@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/sarkarijobadda/backend/conf"
 	"github.com/sarkarijobadda/backend/model"
@@ -64,7 +65,7 @@ func CreateDynamicLink(p *model.Post) (string, error) {
 
 	d := DynamicLinkInfo{
 		DomainURIPrefix:   conf.DomainURIPrefix,
-		Link:              conf.DeepLinkDomain + p.ID.Hex(),
+		Link:              conf.DeepLinkDomain + strconv.FormatInt(p.ID, 10),
 		AndroidInfo:       a,
 		SocialMetaTagInfo: s,
 	}

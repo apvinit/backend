@@ -1,7 +1,9 @@
 package main
 
 import (
-	"context"
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/sarkarijobadda/backend/conf"
 	"github.com/sarkarijobadda/backend/handler"
@@ -9,8 +11,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const apikey1 = "wA5dZ8J1U4mt7X2LFRy9W8337Sda1eAotmSID8dYHHdUfer3"
@@ -18,6 +18,12 @@ const apikey2 = "diAENJWzWGdZmcS3M4/zOVZjSe0O9jhIdmVdG5uVXjasFlxr"
 const apikey3 = "irabmvXNBCo3xf3bhRKagMwhOLbiLvlAlDkhqUIXC28ZTQNZ"
 
 func main() {
+	db, err := sql.Open("sqlite3", "ebaggo.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	initDB(db)
 
 	e := echo.New()
 	e.Logger.SetLevel(log.DEBUG)
@@ -30,24 +36,12 @@ func main() {
 		return key == apikey1, nil
 	}))
 
-	// Mongodb database client options and connection
-	clientOptions := options.Client().ApplyURI("mongodb://" + conf.DatabaseIP + ":27017")
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Check the connection
-	err = client.Ping(context.TODO(), nil)
-	if err == nil {
-		println("Connected to database!")
-	} else {
-		println("Could not connect to database!")
-	}
-
 	// Initialize handler
-	h := &handler.Handler{DB: client.Database(conf.DatabaseName)}
+	h := &handler.Handler{DB: db}
 
 	// Routes
 
@@ -65,6 +59,7 @@ func main() {
 	e.GET("/posts/search", h.SearchPost)
 
 	// Start server
+	e.HideBanner = true
 	e.Logger.Fatal(e.Start(conf.ServerPort))
 
 }

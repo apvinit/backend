@@ -1,11 +1,13 @@
 package handler
 
-import "go.mongodb.org/mongo-driver/mongo"
+import (
+	"database/sql"
+)
 
 // Key for signing
 const Key = "ThisIsASecret"
 
 // Handler for managing mongo db access
 type Handler struct {
-	DB *mongo.Database
+	DB *sql.DB
 }
