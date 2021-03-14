@@ -250,9 +250,9 @@ func (h *Handler) GetPostShortInfo(c echo.Context) (err error) {
 	qp := c.QueryParam("type")
 	var sql string
 	if qp == "" {
-		sql = "SELECT id, type, title, updated_date FROM posts"
+		sql = "SELECT id, type, title, updated_date FROM posts WHERE trash = false"
 	} else {
-		sql = "SELECT id, type, title, updated_date FROM posts WHERE type LIKE ?"
+		sql = "SELECT id, type, title, updated_date FROM posts WHERE type LIKE ? AND trash = false"
 	}
 
 	posts := []*model.PostShortInfo{}
@@ -280,7 +280,7 @@ func (h *Handler) SearchPost(c echo.Context) (err error) {
 	if err != nil {
 		log.Println(err)
 	}
-	rows, err := h.DB.Query(`SELECT id FROM posts WHERE title LIKE %?%`, q)
+	rows, err := h.DB.Query(`SELECT id FROM posts WHERE title LIKE %?% AND trash = false`, q)
 
 	for rows.Next() {
 		var p model.PostShortInfo
