@@ -26,19 +26,16 @@ func main() {
 	initDB(db)
 
 	e := echo.New()
-	e.Logger.SetLevel(log.DEBUG)
 
 	// Middleware
-	e.Use(middleware.Logger())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status} ${error}\n",
+	}))
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 	e.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) {
 		return key == apikey1, nil
 	}))
-
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	// Initialize handler
 	h := &handler.Handler{DB: db}
