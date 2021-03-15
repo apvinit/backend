@@ -104,4 +104,10 @@ func initDB(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// posts search
+	_, err = db.Exec(`
+	  CREATE VIRTUAL TABLE posts_search USING FTS5(
+			id, title, name, info, organisation)
+	`)
 }

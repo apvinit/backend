@@ -38,7 +38,10 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 	}
 	p.ID, _ = r.LastInsertId()
 
-	sql := `INSERT INTO dates(date, title, post_id) VALUES (?,?,?)`
+	sql := `INSERT INTO posts_search(id,title,name,info, organisation) VALUES (?,?,?,?,?)`
+	h.DB.Exec(sql, p.ID, p.Title, p.Name, p.Info, p.Organisation)
+
+	sql = `INSERT INTO dates(date, title, post_id) VALUES (?,?,?)`
 	for _, v := range p.Dates {
 		_, err = h.DB.Exec(sql, v.Date, v.Title, p.ID)
 		if err != nil {
@@ -284,11 +287,17 @@ func (h *Handler) SearchPost(c echo.Context) (err error) {
 	if err != nil {
 		log.Println(err)
 	}
-	rows, err := h.DB.Query(`SELECT id FROM posts WHERE title LIKE %?% AND trash = false`, q)
 
+	rows, err := h.DB.Query(`
+	SELECT id, type, title, updated_date FROM posts WHERE trash = false AND id IN
+(SELECT id FROM posts_search WHERE posts_search MATCH ?)`, q)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	for rows.Next() {
 		var p model.PostShortInfo
-		err = rows.Scan()
+		err = rows.Scan(&p.ID, &p.Type, &p.Title, &p.UpdatedDate)
 		if err != nil {
 			log.Println(err)
 		}
