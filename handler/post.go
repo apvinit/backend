@@ -39,7 +39,11 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 	p.ID, _ = r.LastInsertId()
 
 	sql := `INSERT INTO posts_search(id,title,name,info, organisation) VALUES (?,?,?,?,?)`
-	h.DB.Exec(sql, p.ID, p.Title, p.Name, p.Info, p.Organisation)
+	_, err = h.DB.Exec(sql, p.ID, p.Title, p.Name, p.Info, p.Organisation)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	sql = `INSERT INTO dates(date, title, post_id) VALUES (?,?,?)`
 	for _, v := range p.Dates {
