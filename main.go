@@ -23,6 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
+	db.SetMaxOpenConns(1)
 	initDB(db)
 
 	e := echo.New()
