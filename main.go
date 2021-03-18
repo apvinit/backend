@@ -18,12 +18,11 @@ const apikey2 = "diAENJWzWGdZmcS3M4/zOVZjSe0O9jhIdmVdG5uVXjasFlxr"
 const apikey3 = "irabmvXNBCo3xf3bhRKagMwhOLbiLvlAlDkhqUIXC28ZTQNZ"
 
 func main() {
-	db, err := sql.Open("sqlite3", "file:jobadda.db?cache=shared")
+	db, err := sql.Open("sqlite3", "file:jobadda.db")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	db.SetMaxOpenConns(1)
 	initDB(db)
 
 	e := echo.New()
