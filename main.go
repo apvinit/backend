@@ -18,7 +18,7 @@ const apikey2 = "diAENJWzWGdZmcS3M4/zOVZjSe0O9jhIdmVdG5uVXjasFlxr"
 const apikey3 = "irabmvXNBCo3xf3bhRKagMwhOLbiLvlAlDkhqUIXC28ZTQNZ"
 
 func main() {
-	db, err := sql.Open("sqlite3", "jobadda.db")
+	db, err := sql.Open("sqlite3", "file:jobadda.db?cache=shared")
 	if err != nil {
 		log.Fatal(err)
 	}
