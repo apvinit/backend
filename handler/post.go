@@ -30,15 +30,18 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 	}
 	p.ShortLink = shortLink
 
-	r, err := h.DB.Exec(`
-		INSERT INTO posts(short_link, image_link, type, title, name, info, created_date, updated_date, organisation, total_vacancy, age_limit_as_on, draft) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
-	`, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft)
+	sql := `
+	INSERT INTO posts(short_link, image_link, type, title, name, info, created_date, updated_date, 
+	organisation, total_vacancy, age_limit_as_on, draft) 
+	VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`
+
+	r, err := h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft)
 	if err != nil {
 		return
 	}
 	p.ID, _ = r.LastInsertId()
 
-	sql := `INSERT INTO posts_search(id,title,name,info, organisation) VALUES (?,?,?,?,?)`
+	sql = `INSERT INTO posts_search(id,title,name,info, organisation) VALUES (?,?,?,?,?)`
 	_, err = h.DB.Exec(sql, p.ID, p.Title, p.Name, p.Info, p.Organisation)
 	if err != nil {
 		fmt.Println(err)
