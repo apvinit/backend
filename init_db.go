@@ -98,6 +98,7 @@ func initDB(db *sql.DB) {
 			ph TEXT,
 			total TEXT,
 			age_limit TEXT,
+			eligibility TEXT,
 			post_id INTEGER
 		)
 	`)

@@ -48,6 +48,8 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 		return
 	}
 
+	fmt.Println("Fees length", len(p.Fees))
+
 	sql = `INSERT INTO dates(date, title, post_id) VALUES (?,?,?)`
 	for _, v := range p.Dates {
 		_, err = h.DB.Exec(sql, v.Date, v.Title, p.ID)
@@ -72,11 +74,19 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 		}
 	}
 
+	sql = `INSERT INTO fees (title, body, post_id) VALUES (?,?,?)`
+	for _, v := range p.Fees {
+		_, err = h.DB.Exec(sql, v.Title, v.Body, p.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
 	sql = `
 	INSERT into vacancies (category, name, gen, obc, bca, bcb, ews,
-	sc, st, ph, total, age_limit, post_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`
+	sc, st, ph, total, age_limit, eligibility, post_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
 	for _, v := range p.Vacancies {
-		_, err = h.DB.Exec(sql, v.Category, v.Name, v.Gen, v.OBC, v.BCA, v.BCB, v.EWS, v.SC, v.ST, v.PH, v.Total, v.AgeLimit, p.ID)
+		_, err = h.DB.Exec(sql, v.Category, v.Name, v.Gen, v.OBC, v.BCA, v.BCB, v.EWS, v.SC, v.ST, v.PH, v.Total, v.AgeLimit, v.Eligibility, p.ID)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -209,14 +219,14 @@ func (h *Handler) getPostAgeLimits(id int64) (items []model.GeneralItem) {
 func (h *Handler) getPostAgeVacancies(id int64) (vacancies []model.VacancyItem) {
 
 	rows, err := h.DB.Query(`
-	SELECT category, name, gen, obc, bca, bcb, ews, sc, st, ph, total, age_limit FROM vacancies WHERE post_id = ?`, id)
+	SELECT category, name, gen, obc, bca, bcb, ews, sc, st, ph, total, age_limit, eligibility FROM vacancies WHERE post_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	for rows.Next() {
 		var v model.VacancyItem
-		err = rows.Scan(&v.Category, &v.Name, &v.Gen, &v.OBC, &v.BCA, &v.BCB, &v.EWS, &v.SC, &v.ST, &v.PH, &v.Total, &v.AgeLimit)
+		err = rows.Scan(&v.Category, &v.Name, &v.Gen, &v.OBC, &v.BCA, &v.BCB, &v.EWS, &v.SC, &v.ST, &v.PH, &v.Total, &v.AgeLimit, &v.Eligibility)
 		if err != nil {
 			fmt.Println(err)
 			return nil
