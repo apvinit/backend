@@ -25,30 +25,35 @@ type Post struct {
 
 // ImportantDate is used for important date
 type ImportantDate struct {
+	ID    int    `json:"id"`
 	Date  string `json:"date"`
 	Title string `json:"title"`
 }
 
 // ImportantLink is used for important links
 type ImportantLink struct {
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 	URL   string `json:"url"`
 }
 
 // ApplicationFee is used for application fees
 type ApplicationFee struct {
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 	Body  string `json:"amount"`
 }
 
 // GeneralItem is used for general items
 type GeneralItem struct {
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
 // VacancyItem is used for vacancy item
 type VacancyItem struct {
+	ID          int    `json:"id"`
 	Category    string `json:"category"`
 	Name        string `json:"name"`
 	Gen         string `json:"gen"`

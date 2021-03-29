@@ -48,8 +48,6 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 		return
 	}
 
-	fmt.Println("Fees length", len(p.Fees))
-
 	sql = `INSERT INTO dates(date, title, post_id) VALUES (?,?,?)`
 	for _, v := range p.Dates {
 		_, err = h.DB.Exec(sql, v.Date, v.Title, p.ID)
@@ -142,14 +140,14 @@ func (h *Handler) FetchOnePost(c echo.Context) (err error) {
 
 func (h *Handler) getPostImportantDates(id int64) (dates []model.ImportantDate) {
 
-	rows, err := h.DB.Query(`SELECT title, date FROM dates WHERE post_id = ?`, id)
+	rows, err := h.DB.Query(`SELECT id, title, date FROM dates WHERE post_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	for rows.Next() {
 		var d model.ImportantDate
-		err = rows.Scan(&d.Title, &d.Date)
+		err = rows.Scan(&d.ID, &d.Title, &d.Date)
 		if err != nil {
 			fmt.Println(err)
 			return nil
@@ -161,14 +159,14 @@ func (h *Handler) getPostImportantDates(id int64) (dates []model.ImportantDate) 
 
 func (h *Handler) getPostImportantLink(id int64) (links []model.ImportantLink) {
 
-	rows, err := h.DB.Query(`SELECT title, url FROM links WHERE post_id = ?`, id)
+	rows, err := h.DB.Query(`SELECT id, title, url FROM links WHERE post_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	for rows.Next() {
 		var l model.ImportantLink
-		err = rows.Scan(&l.Title, &l.URL)
+		err = rows.Scan(&l.ID, &l.Title, &l.URL)
 		if err != nil {
 			fmt.Println(err)
 			return nil
@@ -180,14 +178,14 @@ func (h *Handler) getPostImportantLink(id int64) (links []model.ImportantLink) {
 
 func (h *Handler) getPostApplicationFees(id int64) (fees []model.ApplicationFee) {
 
-	rows, err := h.DB.Query(`SELECT title, body FROM fees WHERE post_id = ?`, id)
+	rows, err := h.DB.Query(`SELECT id, title, body FROM fees WHERE post_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	for rows.Next() {
 		var f model.ApplicationFee
-		err = rows.Scan(&f.Title, &f.Body)
+		err = rows.Scan(&f.ID, &f.Title, &f.Body)
 		if err != nil {
 			fmt.Println(err)
 			return nil
@@ -199,14 +197,14 @@ func (h *Handler) getPostApplicationFees(id int64) (fees []model.ApplicationFee)
 
 func (h *Handler) getPostAgeLimits(id int64) (items []model.GeneralItem) {
 
-	rows, err := h.DB.Query(`SELECT title, body FROM items WHERE post_id = ?`, id)
+	rows, err := h.DB.Query(`SELECT id, title, body FROM items WHERE post_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	for rows.Next() {
 		var i model.GeneralItem
-		err = rows.Scan(&i.Title, &i.Body)
+		err = rows.Scan(&i.ID, &i.Title, &i.Body)
 		if err != nil {
 			fmt.Println(err)
 			return nil
@@ -219,14 +217,14 @@ func (h *Handler) getPostAgeLimits(id int64) (items []model.GeneralItem) {
 func (h *Handler) getPostAgeVacancies(id int64) (vacancies []model.VacancyItem) {
 
 	rows, err := h.DB.Query(`
-	SELECT category, name, gen, obc, bca, bcb, ews, sc, st, ph, total, age_limit, eligibility FROM vacancies WHERE post_id = ?`, id)
+	SELECT id, category, name, gen, obc, bca, bcb, ews, sc, st, ph, total, age_limit, eligibility FROM vacancies WHERE post_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	for rows.Next() {
 		var v model.VacancyItem
-		err = rows.Scan(&v.Category, &v.Name, &v.Gen, &v.OBC, &v.BCA, &v.BCB, &v.EWS, &v.SC, &v.ST, &v.PH, &v.Total, &v.AgeLimit, &v.Eligibility)
+		err = rows.Scan(&v.ID, &v.Category, &v.Name, &v.Gen, &v.OBC, &v.BCA, &v.BCB, &v.EWS, &v.SC, &v.ST, &v.PH, &v.Total, &v.AgeLimit, &v.Eligibility)
 		if err != nil {
 			fmt.Println(err)
 			return nil
@@ -254,6 +252,47 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 		return
 	}
 
+	sql = `UPDATE dates SET date = ?, title = ? WHERE id = ?`
+	for _, v := range p.Dates {
+		fmt.Println(v.Date, v.Title, v.ID)
+		_, err = h.DB.Exec(sql, v.Date, v.Title, v.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	sql = `UPDATE links SET title = ?, url = ? WHERE id = ?`
+	for _, v := range p.Links {
+		_, err = h.DB.Exec(sql, v.Title, v.URL, v.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	sql = `UPDATE items SET title = ?, body = ? WHERE id = ?`
+	for _, v := range p.AgeLimits {
+		_, err = h.DB.Exec(sql, v.Title, v.Body, v.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	sql = `UPDATE fees SET title = ?, body = ? WHERE id = ?`
+	for _, v := range p.Fees {
+		_, err = h.DB.Exec(sql, v.Title, v.Body, v.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	sql = `UPDATE vacancies SET category = ?, name = ?, gen = ?, obc = ?, bca = ?, bcb = ?, ews = ?, sc = ?, st = ?, ph = ?, total = ?, age_limit = ?, eligibility = ? WHERE id = ?`
+	for _, v := range p.Vacancies {
+		_, err = h.DB.Exec(sql, v.Category, v.Name, v.Gen, v.OBC, v.BCA, v.BCB, v.EWS, v.SC, v.ST, v.PH, v.Total, v.AgeLimit, v.Eligibility, v.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
 	return c.NoContent(http.StatusOK)
 }
 
@@ -274,9 +313,9 @@ func (h *Handler) GetPostShortInfo(c echo.Context) (err error) {
 	qp := c.QueryParam("type")
 	var sql string
 	if qp == "" {
-		sql = "SELECT id, type, title, updated_date FROM posts WHERE trash = false"
+		sql = "SELECT id, type, title, updated_date FROM posts WHERE trash = false ORDER BY id DESC"
 	} else {
-		sql = "SELECT id, type, title, updated_date FROM posts WHERE type LIKE ? AND trash = false"
+		sql = "SELECT id, type, title, updated_date FROM posts WHERE type LIKE ? AND trash = false ORDER BY id DESC"
 	}
 
 	posts := []*model.PostShortInfo{}
