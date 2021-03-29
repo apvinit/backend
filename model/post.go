@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 // Post type for holding post items
 type Post struct {
 	ID           int64            `json:"id"`
@@ -21,6 +23,8 @@ type Post struct {
 	Vacancies    []VacancyItem    `json:"vacancies"`
 	Draft        bool             `json:"draft"`
 	Trash        bool             `json:"trash"`
+	CreatedAt    time.Time        `json:"created_at,omitempty"`
+	UpdatedAt    time.Time        `json:"updated_at,omitempty"`
 }
 
 // ImportantDate is used for important date

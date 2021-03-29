@@ -10,7 +10,7 @@ export default function () {
     "Content-Type": "application/json",
   };
 
-  for (var i = 1; i <= 100; i++) {
+  for (var i = 1; i <= 50; i++) {
     var obj = {
       short_link: "http://shortlink.com/some" + i,
       image_link: "http://via.placeholder.com/300",

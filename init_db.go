@@ -23,7 +23,9 @@ func initDB(db *sql.DB) {
 			total_vacancy TEXT,
 			age_limit_as_on TEXT,
 			draft BOOLEAN,
-			trash BOOLEAN DEFAULT false
+			trash BOOLEAN DEFAULT false,
+			created_at TEXT,
+			updated_at TEXT
 		)
 	`)
 	if err != nil {

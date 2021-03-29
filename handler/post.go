@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/sarkarijobadda/backend/conf"
 	"github.com/sarkarijobadda/backend/model"
@@ -29,13 +30,16 @@ func (h *Handler) CreatePost(c echo.Context) (err error) {
 		print(err)
 	}
 	p.ShortLink = shortLink
+	t := time.Now()
+	p.CreatedAt = t
+	p.UpdatedAt = t
 
 	sql := `
 	INSERT INTO posts(short_link, image_link, type, title, name, info, created_date, updated_date, 
-	organisation, total_vacancy, age_limit_as_on, draft) 
-	VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`
+	organisation, total_vacancy, age_limit_as_on, draft, created_at, updated_at) 
+	VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
 
-	r, err := h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft)
+	r, err := h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft, p.CreatedAt, p.UpdatedAt)
 	if err != nil {
 		return
 	}
@@ -244,9 +248,9 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 		return
 	}
 
-	sql := `UPDATE posts SET short_link = ?, image_link = ?, type = ?, title = ?, name = ?, info = ?, created_date = ?, updated_date = ?, organisation = ?, total_vacancy = ?, age_limit_as_on = ?, draft = ?, trash = ? WHERE id = ?`
+	sql := `UPDATE posts SET short_link = ?, image_link = ?, type = ?, title = ?, name = ?, info = ?, created_date = ?, updated_date = ?, organisation = ?, total_vacancy = ?, age_limit_as_on = ?, draft = ?, trash = ?, updated_at = ? WHERE id = ?`
 
-	_, err = h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft, p.Trash, id)
+	_, err = h.DB.Exec(sql, p.ShortLink, p.ImageLink, p.Type, p.Title, p.Name, p.Info, p.CreatedDate, p.UpdatedDate, p.Organisation, p.TotalVacancy, p.AgeLimitAsOn, p.Draft, p.Trash, time.Now(), id)
 	if err != nil {
 		fmt.Println(err)
 		return
