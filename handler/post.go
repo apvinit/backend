@@ -258,8 +258,11 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 
 	sql = `UPDATE dates SET date = ?, title = ? WHERE id = ?`
 	for _, v := range p.Dates {
-		fmt.Println(v.Date, v.Title, v.ID)
-		_, err = h.DB.Exec(sql, v.Date, v.Title, v.ID)
+		if v.ID == 0 {
+			_, err = h.DB.Exec("INSERT INTO dates(title, date, post_id) VALUES(?,?,?)", v.Title, v.Date, id)
+		} else {
+			_, err = h.DB.Exec(sql, v.Date, v.Title, v.ID)
+		}
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -267,7 +270,12 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 
 	sql = `UPDATE links SET title = ?, url = ? WHERE id = ?`
 	for _, v := range p.Links {
-		_, err = h.DB.Exec(sql, v.Title, v.URL, v.ID)
+		if v.ID == 0 {
+			_, err = h.DB.Exec("INSERT INTO links (title, url, post_id) VALUES (?,?,?)", v.Title, v.URL, id)
+		} else {
+
+			_, err = h.DB.Exec(sql, v.Title, v.URL, v.ID)
+		}
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -275,7 +283,11 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 
 	sql = `UPDATE items SET title = ?, body = ? WHERE id = ?`
 	for _, v := range p.AgeLimits {
-		_, err = h.DB.Exec(sql, v.Title, v.Body, v.ID)
+		if v.ID == 0 {
+			_, err = h.DB.Exec("INSERT INTO items (title, body, post_id) VALUES (?,?,?)", v.Title, v.Body, id)
+		} else {
+			_, err = h.DB.Exec(sql, v.Title, v.Body, v.ID)
+		}
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -283,7 +295,11 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 
 	sql = `UPDATE fees SET title = ?, body = ? WHERE id = ?`
 	for _, v := range p.Fees {
-		_, err = h.DB.Exec(sql, v.Title, v.Body, v.ID)
+		if v.ID == 0 {
+			_, err = h.DB.Exec("INSERT INTO fees (title, body, post_id) VALUES (?,?,?)", v.Title, v.Body, id)
+		} else {
+			_, err = h.DB.Exec(sql, v.Title, v.Body, v.ID)
+		}
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -291,7 +307,12 @@ func (h *Handler) UpdatePost(c echo.Context) (err error) {
 
 	sql = `UPDATE vacancies SET category = ?, name = ?, gen = ?, obc = ?, bca = ?, bcb = ?, ews = ?, sc = ?, st = ?, ph = ?, total = ?, age_limit = ?, eligibility = ? WHERE id = ?`
 	for _, v := range p.Vacancies {
-		_, err = h.DB.Exec(sql, v.Category, v.Name, v.Gen, v.OBC, v.BCA, v.BCB, v.EWS, v.SC, v.ST, v.PH, v.Total, v.AgeLimit, v.Eligibility, v.ID)
+		if v.ID == 0 {
+			insertSql := "INSERT INTO vacancies (category, name, gen, obc, bca, bcb, ews, sc, st, ph, total, age_limit, eligibility, post_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+			_, err = h.DB.Exec(insertSql, v.Category, v.Name, v.Gen, v.OBC, v.BCA, v.BCB, v.EWS, v.SC, v.ST, v.PH, v.Total, v.AgeLimit, v.Eligibility, id)
+		} else {
+			_, err = h.DB.Exec(sql, v.Category, v.Name, v.Gen, v.OBC, v.BCA, v.BCB, v.EWS, v.SC, v.ST, v.PH, v.Total, v.AgeLimit, v.Eligibility, v.ID)
+		}
 		if err != nil {
 			fmt.Println(err)
 		}
